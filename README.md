@@ -24,12 +24,23 @@ The container automatically installs Claude Code CLI, the ralph-loop plugin, and
 
 ### 3. Initialise your project
 
+Inside Claude Code, run:
+
+```
+/init-project
+```
+
+This interactive skill asks you for your project name, GitHub owner, description, and tech stack, then:
+- Configures the devcontainer with the right base image, ports, and VS Code extensions
+- Rewrites README.md and updates CLAUDE.md with your project details
+- Sets your GitHub repo description and visibility
+- Commits everything in one go
+
+Alternatively, run the bash script directly:
+
 ```bash
 ./init.sh
 ```
-
-This rewrites the README, devcontainer name, and CLAUDE.md with your project details.
-Delete `init.sh` after running it.
 
 ### 4. Authenticate
 
@@ -71,6 +82,12 @@ claude /ralph-loop:ralph-loop "<your prompt>" \
 ```
 
 Other commands: `/ralph-loop:cancel-ralph` (stop a loop), `/ralph-loop:help` (usage info).
+
+## Project Setup Skill
+
+| Command | Purpose |
+|---------|---------|
+| `/init-project` | Interactive setup — configures devcontainer, README, CLAUDE.md, GitHub repo metadata, and commits |
 
 ## References
 
