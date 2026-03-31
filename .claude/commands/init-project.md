@@ -4,6 +4,30 @@ You are running the **init-project** skill. Gather project details interactively
 
 ---
 
+## Pre-flight — Read current state
+
+Before asking the user anything, read these files so you know what already exists and what the current values are. This prevents Edit failures from mismatched `old_string`:
+
+```bash
+cat .devcontainer/devcontainer.json
+```
+```bash
+head -3 README.md
+```
+```bash
+head -5 CLAUDE.md
+```
+```bash
+test -f init.sh && echo "init.sh present" || echo "init.sh absent"
+```
+```bash
+git remote get-url origin 2>/dev/null || echo "no remote"
+```
+
+Note what the current `"name"`, `"image"`, `"forwardPorts"`, and `"extensions"` values are in devcontainer.json. You will need these exact strings later.
+
+---
+
 ## Step 1 — Gather project details (Round 1)
 
 Use **AskUserQuestion** with exactly these 4 questions in one call:
@@ -127,16 +151,26 @@ Question 4:
 
 ## Step 4 — Update `.devcontainer/devcontainer.json`
 
-**Read the file first** (required before any Edit call), then use Edit to make targeted replacements:
+**Read the file first** (required before any Edit call). After reading, extract the *current* values for `"name"`, `"image"`, `"forwardPorts"`, and `"extensions"` — you must use the **exact current string** as `old_string` in each Edit call, or the edit will fail.
 
-1. Replace the `"name"` value with `"<PROJECT_NAME> Dev Environment"`
-2. Replace the `"image"` value with the mapped image URL
-3. Replace `"forwardPorts": []` with `"forwardPorts": [<comma-separated integers>]`
-   - If no ports selected, leave as `[]`
-4. Replace `"extensions": []` inside `customizations.vscode` with `"extensions": [<quoted IDs>]`
-   - If no extensions selected, leave as `[]`
+Apply each change as a separate Edit call:
 
-After editing, read the file back and visually confirm the image line and name are correct. If any edit failed silently, re-apply it.
+1. Replace the current `"name": "<CURRENT_NAME>"` line with `"name": "<PROJECT_NAME> Dev Environment"`
+2. Replace the current `"image": "<CURRENT_IMAGE>"` line with `"image": "<MAPPED_IMAGE>"`
+3. Replace the current `"forwardPorts": <CURRENT_VALUE>` with `"forwardPorts": [<comma-separated port integers>]`
+   - If no ports selected, use `[]`
+4. Replace the current `"extensions": <CURRENT_VALUE>` with `"extensions": [<quoted extension IDs>]`
+   - If no extensions selected, use `[]`
+
+**After editing, validate the JSONC syntax** by running:
+```bash
+node -e "
+  const c = require('fs').readFileSync('.devcontainer/devcontainer.json', 'utf8');
+  const s = c.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  try { JSON.parse(s); console.log('OK'); } catch(e) { console.error('INVALID:', e.message); process.exit(1); }
+"
+```
+If this prints `INVALID`, read the file again and fix the malformed JSON before proceeding.
 
 ---
 
@@ -189,7 +223,7 @@ See [CLAUDE.md](CLAUDE.md) for project conventions and AI-assisted development g
 
 ## Step 6 — Update `CLAUDE.md`
 
-**Read the file first**, then use Edit to replace `[Your Project Name]` with `<PROJECT_NAME>`. Do not change anything else.
+**Read the file first**. If it contains `[Your Project Name]`, replace it with `<PROJECT_NAME>`. If it already contains a project name (from a prior run), replace that name with `<PROJECT_NAME>`. Do not change anything else.
 
 ---
 
