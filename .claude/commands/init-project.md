@@ -261,17 +261,15 @@ with the chosen stack. Use this map:
 | Rust | `Rust` |
 | Other / custom | the image name the user provided |
 
-**6d. Development commands** — Replace the placeholder build/test/run commands with stack-appropriate examples:
+**6d. Development commands** — Make three separate Edit calls (build, test, run), one per placeholder line. The exact `old_string` for each is the comment inside the code fence:
 
-| Stack | Build | Test | Run |
-|---|---|---|---|
-| Node.js 22 | `npm run build` | `npm test` | `npm start` |
-| Python 3.12 | `pip install -r requirements.txt` | `pytest` | `python main.py` |
-| Go 1.22 | `go build ./...` | `go test ./...` | `go run main.go` |
-| Rust | `cargo build` | `cargo test` | `cargo run` |
-| Other | leave as `# add build command` | leave as `# add test command` | leave as `# add run command` |
+| Section | old_string (exact) | new_string for chosen stack |
+|---|---|---|
+| Build | `# e.g. npm run build` | Node: `npm run build` · Python: `pip install -r requirements.txt` · Go: `go build ./...` · Rust: `cargo build` · Other: `# add build command` |
+| Test | `# e.g. npm test` | Node: `npm test` · Python: `pytest` · Go: `go test ./...` · Rust: `cargo test` · Other: `# add test command` |
+| Run | `# e.g. npm start` | Node: `npm start` · Python: `python main.py` · Go: `go run main.go` · Rust: `cargo run` · Other: `# add run command` |
 
-Use separate Edit calls for each replacement so a failure in one does not block the others.
+Each old_string appears only once in CLAUDE.md, so these replacements are safe. If a replacement fails, re-read the file, find the actual current text, and retry with the correct old_string.
 
 ---
 
