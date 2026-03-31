@@ -147,19 +147,42 @@ Question 4:
 
 **Ports:** convert selected labels to integers (e.g. "3000" → 3000).
 
+**Node feature flag:** Claude Code is installed via `npm` in `setup.sh`. If the chosen image is **not** Node.js 22, you must add `"ghcr.io/devcontainers/features/node:1": {}` to the `features` block so npm is available at build time. Without this the `postCreateCommand` will fail and the devcontainer will not start.
+
+| Tech stack | Needs node feature? |
+|---|---|
+| Node.js 22 | No — npm is already in the base image |
+| Python 3.12 | **Yes** |
+| Go 1.22 | **Yes** |
+| Other / custom | **Yes** (assume no npm unless user confirms) |
+
 ---
 
 ## Step 4 — Update `.devcontainer/devcontainer.json`
 
-**Read the file first** (required before any Edit call). After reading, extract the *current* values for `"name"`, `"image"`, `"forwardPorts"`, and `"extensions"` — you must use the **exact current string** as `old_string` in each Edit call, or the edit will fail.
+**Read the file first** (required before any Edit call). After reading, extract the *current* values for `"name"`, `"image"`, `"forwardPorts"`, `"extensions"`, and the `"features"` block — you must use the **exact current string** as `old_string` in each Edit call, or the edit will fail.
 
 Apply each change as a separate Edit call:
 
 1. Replace the current `"name": "<CURRENT_NAME>"` line with `"name": "<PROJECT_NAME> Dev Environment"`
 2. Replace the current `"image": "<CURRENT_IMAGE>"` line with `"image": "<MAPPED_IMAGE>"`
-3. Replace the current `"forwardPorts": <CURRENT_VALUE>` with `"forwardPorts": [<comma-separated port integers>]`
+3. **If a non-Node stack was chosen**, replace the current `"features"` block:
+   ```json
+   "features": {
+       "ghcr.io/devcontainers/features/github-cli:1": {}
+     },
+   ```
+   with:
+   ```json
+   "features": {
+       "ghcr.io/devcontainers/features/github-cli:1": {},
+       "ghcr.io/devcontainers/features/node:1": {}
+     },
+   ```
+   (Use the exact whitespace/indentation from the current file.)
+4. Replace the current `"forwardPorts": <CURRENT_VALUE>` with `"forwardPorts": [<comma-separated port integers>]`
    - If no ports selected, use `[]`
-4. Replace the current `"extensions": <CURRENT_VALUE>` with `"extensions": [<quoted extension IDs>]`
+5. Replace the current `"extensions": <CURRENT_VALUE>` with `"extensions": [<quoted extension IDs>]`
    - If no extensions selected, use `[]`
 
 **After editing, validate the JSONC syntax** by running:
