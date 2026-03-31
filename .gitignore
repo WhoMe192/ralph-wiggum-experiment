@@ -1,0 +1,21 @@
+# Claude Code local state
+.claude/*.local.md
+.claude/*.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+*.swp
+*.swo
+
+# Environment secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*

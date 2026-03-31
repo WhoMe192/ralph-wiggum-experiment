@@ -300,6 +300,36 @@ gh repo edit --description "..." --visibility public --accept-visibility-change-
 
 ---
 
+## Step 7b — Extend `.gitignore` with stack-specific entries
+
+Check if `.gitignore` exists (`test -f .gitignore`). If it does not exist, create it with at minimum:
+```
+.claude/*.local.md
+.claude/*.local.json
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+```
+
+Then append stack-specific entries (only if they are not already present — check with `grep`):
+
+| Stack | Entries to append |
+|---|---|
+| Node.js 22 | `node_modules/`, `dist/`, `.npm/` |
+| Python 3.12 | `__pycache__/`, `*.pyc`, `venv/`, `.venv/`, `*.egg-info/` |
+| Go 1.22 | `*.exe`, `*.test`, `coverage.out` |
+| Rust | `target/` |
+| Other | nothing extra |
+
+Use Bash to append only missing entries, e.g.:
+```bash
+grep -q "node_modules" .gitignore || printf "\n# Node.js\nnode_modules/\ndist/\n.npm/\n" >> .gitignore
+```
+
+---
+
 ## Step 8 — Remove `init.sh` if present
 
 ```bash
@@ -333,7 +363,7 @@ If the line is already guarded, skip this edit.
 
 Stage all changed files:
 ```bash
-git add .devcontainer/devcontainer.json .devcontainer/setup.sh README.md CLAUDE.md
+git add .devcontainer/devcontainer.json .devcontainer/setup.sh README.md CLAUDE.md .gitignore
 git add -u
 ```
 
