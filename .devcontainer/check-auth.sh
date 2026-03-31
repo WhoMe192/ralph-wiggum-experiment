@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # Runs on every container start to remind the user about missing auth.
 
+# Restore ~/.claude.json symlink if Claude Code replaced it with a regular file
+CLAUDE_JSON_REAL=/home/node/.claude/claude-code/claude.json
+CLAUDE_JSON=/home/node/.claude.json
+if [ ! -L "$CLAUDE_JSON" ] && [ -f "$CLAUDE_JSON_REAL" ]; then
+  [ -f "$CLAUDE_JSON" ] && mv "$CLAUDE_JSON" "${CLAUDE_JSON}.orig"
+  ln -s "$CLAUDE_JSON_REAL" "$CLAUDE_JSON"
+fi
+
 echo ""
 echo "══════════════════════════════════════════════════════"
 echo "  Checking authentication status..."
