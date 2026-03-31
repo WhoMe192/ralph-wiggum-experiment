@@ -15,10 +15,12 @@ else
 fi
 
 # Claude Code
-if claude auth status &>/dev/null; then
-  echo "  ✓ Claude Code — authenticated"
+if [ -n "$ANTHROPIC_API_KEY" ]; then
+  echo "  ✓ Claude Code — API key present"
+elif claude auth status &>/dev/null; then
+  echo "  ✓ Claude Code — authenticated (OAuth)"
 else
-  echo "  ✗ Claude Code — not authenticated"
+  echo "  ✗ Claude Code — not authenticated and ANTHROPIC_API_KEY not set"
   echo "    Run:  claude    (then follow the login prompt)"
 fi
 
