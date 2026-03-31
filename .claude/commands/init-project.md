@@ -1,65 +1,148 @@
 # /init-project — Interactive Project Initialisation
 
-You are running the **init-project** skill. Your job is to gather project details from the user, update the repository files to configure the devcontainer and GitHub settings, and commit everything so the devcontainer starts without error.
+You are running the **init-project** skill. Gather project details interactively, update repository files to configure the devcontainer and GitHub settings, then commit so the devcontainer can start without error.
 
-## Step 1 — Gather project basics
+---
 
-Use AskUserQuestion to collect (in up to 4 questions per call):
+## Step 1 — Gather project details (Round 1)
 
-**Round 1** — ask all four at once:
-1. "What is your project name?" (header: "Project name") — options: offer a reminder that this becomes the devcontainer name and GitHub repo slug; since it is free text, include at least one placeholder option like "my-project" so the user can type their own via Other.
-2. "What is your GitHub owner or org?" (header: "GitHub owner") — options similar placeholder.
-3. "What is a one-line description of the project?" (header: "Description") — placeholder option.
-4. "Which runtime / tech stack will this project use?" (header: "Tech stack") — options:
-   - Node.js 22 (default)
-   - Python 3.12
-   - Go 1.22
-   - Rust
-   - Base Ubuntu (other language)
+Use **AskUserQuestion** with exactly these 4 questions in one call:
 
-After round 1, if the tech stack answer was "Base Ubuntu (other language)", ask a follow-up free-text question for the exact devcontainer image the user wants.
+```
+Question 1:
+  question: "What is your project name? (becomes the repo slug and devcontainer name)"
+  header: "Project name"
+  multiSelect: false
+  options:
+    - label: "my-project"       description: "Example — type your own name via Other"
+    - label: "my-api"           description: "Example — type your own name via Other"
 
-**Round 2** — ask up to 4 at once:
-1. "Which ports should the devcontainer forward?" (header: "Ports", multiSelect: true) — options: 3000 (Node), 8000 (Django/FastAPI), 8080 (Go/general), 5173 (Vite), None.
-2. "Should any extra VS Code extensions be installed?" (header: "Extensions", multiSelect: true) — options: ESLint, Prettier, Pylance, GitLens, Docker, None.
-3. "What visibility should the GitHub repo have?" (header: "Repo visibility") — options: Public, Private.
-4. "Should the repo have a description set on GitHub?" (header: "GH description") — options: Yes (use the description I entered), No.
+Question 2:
+  question: "What is your GitHub username or organisation?"
+  header: "GitHub owner"
+  multiSelect: false
+  options:
+    - label: "my-username"      description: "Example — type your own via Other"
+    - label: "my-org"           description: "Example — type your own via Other"
 
-## Step 2 — Map answers to configuration values
+Question 3:
+  question: "One-line project description"
+  header: "Description"
+  multiSelect: false
+  options:
+    - label: "A project using Claude Code"   description: "Generic default"
+    - label: "Custom"                        description: "Type your own via Other"
 
-Use this image map:
-| Tech stack answer | devcontainer image |
+Question 4:
+  question: "Which runtime / tech stack will this project use?"
+  header: "Tech stack"
+  multiSelect: false
+  options:
+    - label: "Node.js 22"       description: "JavaScript / TypeScript (Recommended)"
+    - label: "Python 3.12"      description: "Python applications and data science"
+    - label: "Go 1.22"          description: "Go backend services"
+    - label: "Other / custom"   description: "Rust, base Ubuntu, or a custom image"
+```
+
+If the user chose **"Other / custom"** for tech stack, make a second AskUserQuestion call:
+
+```
+Question 1:
+  question: "Which devcontainer base image should be used?"
+  header: "Custom image"
+  multiSelect: false
+  options:
+    - label: "mcr.microsoft.com/devcontainers/rust:1"          description: "Rust"
+    - label: "mcr.microsoft.com/devcontainers/base:ubuntu"     description: "Base Ubuntu"
+    - label: "Custom image URL"                                 description: "Type your own via Other"
+```
+
+---
+
+## Step 2 — Gather configuration options (Round 2)
+
+Use **AskUserQuestion** with exactly these 4 questions in one call:
+
+```
+Question 1:
+  question: "Which ports should the devcontainer forward? (select all that apply)"
+  header: "Ports"
+  multiSelect: true
+  options:
+    - label: "3000"   description: "Node.js / React dev server"
+    - label: "8000"   description: "Django / FastAPI"
+    - label: "8080"   description: "Go / general HTTP"
+    - label: "5173"   description: "Vite dev server"
+
+Question 2:
+  question: "Which VS Code extensions should be pre-installed? (select all that apply)"
+  header: "Extensions"
+  multiSelect: true
+  options:
+    - label: "ESLint"     description: "dbaeumer.vscode-eslint"
+    - label: "Prettier"   description: "esbenp.prettier-vscode"
+    - label: "Pylance"    description: "ms-python.vscode-pylance"
+    - label: "GitLens"    description: "eamodio.gitlens"
+
+Question 3:
+  question: "What should the GitHub repository visibility be?"
+  header: "Visibility"
+  multiSelect: false
+  options:
+    - label: "Public"    description: "Visible to everyone on GitHub"
+    - label: "Private"   description: "Only visible to you and collaborators"
+
+Question 4:
+  question: "Should the GitHub repo description be set from your project description?"
+  header: "GH description"
+  multiSelect: false
+  options:
+    - label: "Yes"   description: "Run gh repo edit --description '...'"
+    - label: "No"    description: "Leave GitHub description unchanged"
+```
+
+---
+
+## Step 3 — Map answers to config values
+
+**Image map:**
+| Tech stack | devcontainer image |
 |---|---|
-| Node.js 22 | mcr.microsoft.com/devcontainers/javascript-node:22 |
-| Python 3.12 | mcr.microsoft.com/devcontainers/python:3.12 |
-| Go 1.22 | mcr.microsoft.com/devcontainers/go:1.22 |
-| Rust | mcr.microsoft.com/devcontainers/rust:1 |
-| Base Ubuntu (other language) | mcr.microsoft.com/devcontainers/base:ubuntu |
-| Custom (user-supplied) | whatever the user typed |
+| Node.js 22 | `mcr.microsoft.com/devcontainers/javascript-node:22` |
+| Python 3.12 | `mcr.microsoft.com/devcontainers/python:3.12` |
+| Go 1.22 | `mcr.microsoft.com/devcontainers/go:1.22` |
+| Other / custom | use the image from Step 1 round 2 |
 
-Extension IDs:
-- ESLint → dbaeumer.vscode-eslint
-- Prettier → esbenp.prettier-vscode
-- Pylance → ms-python.vscode-pylance
-- GitLens → eamodio.gitlens
-- Docker → ms-azuretools.vscode-docker
+**Extension IDs:**
+| Label | ID |
+|---|---|
+| ESLint | `dbaeumer.vscode-eslint` |
+| Prettier | `esbenp.prettier-vscode` |
+| Pylance | `ms-python.vscode-pylance` |
+| GitLens | `eamodio.gitlens` |
 
-## Step 3 — Implement the configuration
+**Ports:** convert selected labels to integers (e.g. "3000" → 3000).
 
-Make all file edits using the Edit or Write tools (never sed/awk via Bash).
+---
 
-### 3a. `.devcontainer/devcontainer.json`
+## Step 4 — Update `.devcontainer/devcontainer.json`
 
-- Set `"name"` to `"<PROJECT_NAME> Dev Environment"`
-- Set `"image"` to the mapped image
-- Set `"forwardPorts"` to the selected port numbers (integers, not strings); omit if none
-- Set `"customizations.vscode.extensions"` to the list of extension IDs; omit if none
+**Read the file first** (required before any Edit call), then use Edit to make targeted replacements:
 
-Read the file first, then edit it in place. Preserve all comments.
+1. Replace the `"name"` value with `"<PROJECT_NAME> Dev Environment"`
+2. Replace the `"image"` value with the mapped image URL
+3. Replace `"forwardPorts": []` with `"forwardPorts": [<comma-separated integers>]`
+   - If no ports selected, leave as `[]`
+4. Replace `"extensions": []` inside `customizations.vscode` with `"extensions": [<quoted IDs>]`
+   - If no extensions selected, leave as `[]`
 
-### 3b. `README.md`
+After editing, read the file back and visually confirm the image line and name are correct. If any edit failed silently, re-apply it.
 
-Rewrite the entire file to a clean project README using this template (fill in the values):
+---
+
+## Step 5 — Update `README.md`
+
+**Read the file first**, then **Write** the entire file with this content (substituting values):
 
 ```markdown
 # <PROJECT_NAME>
@@ -102,49 +185,68 @@ This project uses a devcontainer with Claude Code pre-installed.
 See [CLAUDE.md](CLAUDE.md) for project conventions and AI-assisted development guidelines.
 ```
 
-### 3c. `CLAUDE.md`
+---
 
-Replace `[Your Project Name]` with the actual project name. Do not change anything else.
+## Step 6 — Update `CLAUDE.md`
 
-### 3d. GitHub repo settings (only if gh CLI is available)
+**Read the file first**, then use Edit to replace `[Your Project Name]` with `<PROJECT_NAME>`. Do not change anything else.
 
-Run `gh auth status` silently to check. If authenticated:
-- If user chose to set description: run `gh repo edit --description "<PROJECT_DESC>"`
-- If user chose Private: run `gh repo edit --visibility private`
-- If user chose Public: run `gh repo edit --visibility public`
+---
 
-Do NOT push or create the repo — only edit metadata on the existing remote.
+## Step 7 — Apply GitHub repo settings
 
-## Step 4 — Validate the devcontainer config
+Check if the gh CLI is authenticated: run `gh auth status 2>&1` and inspect the output.
 
-Run `cat .devcontainer/devcontainer.json` to confirm the JSON is well-formed and the image line reflects the user's choice. If the file is malformed, fix it before committing.
+**If authenticated AND a remote origin exists** (check with `git remote get-url origin 2>&1`):
 
-## Step 5 — Delete init.sh if it still exists
+- If user chose "Yes" for GH description:
+  ```bash
+  gh repo edit --description "<PROJECT_DESC>"
+  ```
+- For visibility (run as separate command, capture exit code):
+  ```bash
+  gh repo edit --visibility public   # or private
+  ```
+  Note: changing to private may require `--accept-visibility-change-consequences`. If the command fails, tell the user to run it manually with that flag.
 
-Check with `test -f init.sh && echo EXISTS` and remove it with Bash `rm init.sh` if present. This is part of clean project initialisation.
+**If not authenticated or no remote:** Skip gh commands and tell the user what to run manually.
 
-## Step 6 — Commit
+---
 
-Stage only the files you changed:
+## Step 8 — Remove `init.sh` if present
+
+```bash
+test -f init.sh && rm init.sh && echo "Removed init.sh" || echo "init.sh not present"
 ```
+
+---
+
+## Step 9 — Commit
+
+Stage all changed files:
+```bash
 git add .devcontainer/devcontainer.json README.md CLAUDE.md
-git add -u  # picks up deleted init.sh if applicable
+git add -u
 ```
 
-Commit with:
-```
+Verify what will be committed with `git status`, then commit:
+```bash
 git commit -m "Initialise project: <PROJECT_NAME>
 
-Configure devcontainer for <TECH_STACK>, set project metadata,
-and update README and CLAUDE.md.
+Configure devcontainer for <TECH_STACK> (<IMAGE>),
+forward ports <PORTS_OR_NONE>, update README and CLAUDE.md.
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 ```
 
-## Step 7 — Report
+---
 
-Tell the user:
-- What was changed and committed
-- How to open the devcontainer (VS Code: Reopen in Container / Codespaces badge)
-- Any GitHub metadata changes made
-- That they can now run `claude` inside the container to start working
+## Step 10 — Report to user
+
+Summarise clearly:
+- Devcontainer configured: image used, ports, extensions
+- Files updated: devcontainer.json, README.md, CLAUDE.md
+- init.sh removed (if applicable)
+- GitHub metadata: what was set, or what to run manually if gh wasn't available
+- Commit SHA
+- **Next step:** "Open the folder in VS Code and click 'Reopen in Container', or open in Codespaces using the badge in the README."
