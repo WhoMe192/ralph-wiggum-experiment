@@ -2,7 +2,8 @@
 
 A ready-to-go devcontainer template with [Claude Code](https://claude.ai/claude-code)
 and the [Ralph-Wiggum](https://awesomeclaude.ai/ralph-wiggum) iterative loop plugin
-pre-installed. Clone it, run `init.sh`, and start building with AI-assisted development.
+pre-installed. Clone it, open the devcontainer, and run `/init-project` to configure
+it for your project.
 
 ## Quick Start
 
@@ -22,7 +23,16 @@ cd my-project
 
 The container automatically installs Claude Code CLI, the ralph-loop plugin, and GitHub CLI.
 
-### 3. Initialise your project
+### 3. Authenticate
+
+An auth check runs on every container start. Follow any prompts:
+
+```
+gh auth login          # GitHub CLI
+claude                 # Claude Code — follow the login prompt
+```
+
+### 4. Initialise your project
 
 Inside Claude Code, run:
 
@@ -30,27 +40,16 @@ Inside Claude Code, run:
 /init-project
 ```
 
-This interactive skill asks you for your project name, GitHub owner, description, and tech stack, then:
-- Configures the devcontainer with the right base image, ports, and VS Code extensions
-- Rewrites README.md and updates CLAUDE.md with your project details
-- Sets your GitHub repo description and visibility
-- Commits everything in one go
+The skill asks a few questions and then:
 
-Alternatively, run the bash script directly:
-
-```bash
-./init.sh
-```
-
-### 4. Authenticate
-
-An auth check runs on every container start. Follow any prompts:
-
-```
-gh auth login          # GitHub CLI
-claude                 # Claude Code — follow the login prompt
-claude install         # Install recommendation from Claude 
-```
+- Sets the devcontainer name, base image, forwarded ports, and VS Code extensions
+- Adds the `node` devcontainer feature if needed (so Claude Code installs correctly on non-Node stacks)
+- Populates `README.md` with your project name, description, and Codespaces badge
+- Populates `CLAUDE.md` with your tech stack, overview, and build/test/run commands
+- Extends `.gitignore` with stack-specific entries
+- Sets GitHub repo description and visibility via `gh repo edit`
+- Removes the one-time `init.sh` script
+- Commits everything in one structured commit
 
 ## What's Included
 
@@ -59,17 +58,10 @@ claude install         # Install recommendation from Claude
 | Claude Code CLI | AI-assisted development from the terminal |
 | Ralph-Loop plugin | [Ralph-Wiggum](https://awesomeclaude.ai/ralph-wiggum) iterative loop methodology |
 | GitHub CLI (`gh`) | Repo, PR, and issue management |
-| Auth check script | Reminds you to log in on container start |
-| `init.sh` | One-time project customisation |
-| `CLAUDE.md` | Starter project conventions for Claude |
-
-## Customising the Tech Stack
-
-Edit `.devcontainer/devcontainer.json` to change:
-
-- **Base image** — swap `javascript-node:22` for Python, Go, Rust, etc. (options listed in comments)
-- **Forwarded ports** — add ports your app needs
-- **VS Code extensions** — add language-specific extensions
+| `/init-project` skill | Interactive one-time project setup (see above) |
+| `CLAUDE.md` | Project conventions for Claude — pre-populated by `/init-project` |
+| `.gitignore` | Base ignore rules; extended per-stack by `/init-project` |
+| Auth check script | Reminds you to log in on every container start |
 
 ## Using Ralph-Wiggum
 
@@ -83,11 +75,14 @@ claude /ralph-loop:ralph-loop "<your prompt>" \
 
 Other commands: `/ralph-loop:cancel-ralph` (stop a loop), `/ralph-loop:help` (usage info).
 
-## Project Setup Skill
+## Customising the Tech Stack
 
-| Command | Purpose |
-|---------|---------|
-| `/init-project` | Interactive setup — configures devcontainer, README, CLAUDE.md, GitHub repo metadata, and commits |
+`/init-project` handles the most common stacks interactively. For manual changes,
+edit `.devcontainer/devcontainer.json`:
+
+- **Base image** — swap `javascript-node:22` for Python, Go, Rust, etc. (options in comments)
+- **Forwarded ports** — add ports your app needs
+- **VS Code extensions** — add language-specific extensions
 
 ## References
 
