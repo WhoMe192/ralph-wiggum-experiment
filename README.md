@@ -1,98 +1,79 @@
-# Ralph-Wiggum Experiment
+# Claude Code + Ralph-Wiggum Devcontainer Template
 
-A devcontainer for experimenting with the
-[Ralph-Wiggum](https://awesomeclaude.ai/ralph-wiggum) iterative AI development
-methodology using Claude Code.
+A ready-to-go devcontainer template with [Claude Code](https://claude.ai/claude-code)
+and the [Ralph-Wiggum](https://awesomeclaude.ai/ralph-wiggum) iterative loop plugin
+pre-installed. Clone it, run `init.sh`, and start building with AI-assisted development.
 
-## What is Ralph-Wiggum?
+## Quick Start
 
-Ralph-Wiggum is a simple iterative loop technique: feed an AI agent a prompt,
-let it work, repeat until done. Named after the Simpsons character for its
-persistent, unfazed approach. The methodology prioritises writing good prompts
-over relying on model quality alone.
+### 1. Create your repo from this template
 
-## Getting Started
-
-### Prerequisites
-
-- [VS Code](https://code.visualstudio.com/) with the
-  [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-  extension, **or**
-- [GitHub Codespaces](https://github.com/features/codespaces)
-
-### Open in a devcontainer
-
-1. Clone the repo and open the folder in VS Code
-2. When prompted, click **Reopen in Container**
-3. Wait for the `postCreateCommand` to finish — this installs Claude Code CLI
-   and the ralph-loop plugin automatically
-
-Or open directly in Codespaces:
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/WhoMe192/ralph-wiggum-experiment)
-
-### Authenticate (required on first use)
-
-Each time you start a fresh container you need to authenticate both tools.
-A reminder is printed in the terminal automatically on startup.
-
-**GitHub CLI:**
+Click **"Use this template"** on GitHub, or:
 
 ```bash
-gh auth login
+gh repo create my-project --template WhoMe192/ralph-wiggum-experiment --clone
+cd my-project
 ```
 
-Follow the prompts to authenticate via browser.
+### 2. Open in a devcontainer
 
-**Claude Code:**
+- **VS Code:** Open the folder → click **Reopen in Container** when prompted
+- **Codespaces:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/WhoMe192/ralph-wiggum-experiment)
+
+The container automatically installs Claude Code CLI, the ralph-loop plugin, and GitHub CLI.
+
+### 3. Initialise your project
 
 ```bash
-claude
+./init.sh
 ```
 
-Follow the prompts to log in with your Anthropic account. Once authenticated,
-subsequent `claude` commands work without re-logging in for the life of the
-container.
+This rewrites the README, devcontainer name, and CLAUDE.md with your project details.
+Delete `init.sh` after running it.
 
-## Usage
+### 4. Authenticate
 
-### Run a Ralph-Wiggum loop
+An auth check runs on every container start. Follow any prompts:
+
+```
+gh auth login          # GitHub CLI
+claude                 # Claude Code — follow the login prompt
+claude install         # Install recommendation from Claude 
+```
+
+## What's Included
+
+| Component | Purpose |
+|-----------|---------|
+| Claude Code CLI | AI-assisted development from the terminal |
+| Ralph-Loop plugin | [Ralph-Wiggum](https://awesomeclaude.ai/ralph-wiggum) iterative loop methodology |
+| GitHub CLI (`gh`) | Repo, PR, and issue management |
+| Auth check script | Reminds you to log in on container start |
+| `init.sh` | One-time project customisation |
+| `CLAUDE.md` | Starter project conventions for Claude |
+
+## Customising the Tech Stack
+
+Edit `.devcontainer/devcontainer.json` to change:
+
+- **Base image** — swap `javascript-node:22` for Python, Go, Rust, etc. (options listed in comments)
+- **Forwarded ports** — add ports your app needs
+- **VS Code extensions** — add language-specific extensions
+
+## Using Ralph-Wiggum
+
+Once authenticated, start a loop:
 
 ```bash
-claude /ralph-loop:ralph-loop "<your prompt here>" \
+claude /ralph-loop:ralph-loop "<your prompt>" \
   --max-iterations 10 \
   --completion-promise "DONE"
 ```
 
-Example:
-
-```bash
-claude /ralph-loop:ralph-loop \
-  "Build a CLI tool that fetches weather for a given city using a free API. Signal completion by printing DONE." \
-  --max-iterations 15 \
-  --completion-promise "DONE"
-```
-
-### Stop a running loop
-
-```bash
-claude /ralph-loop:cancel-ralph
-```
-
-### Get help
-
-```bash
-claude /ralph-loop:help
-```
-
-## Tips
-
-- Set `--max-iterations` to avoid runaway loops (10–20 is a good starting point)
-- Make your `--completion-promise` an exact phrase your prompt instructs the
-  model to output when finished
-- Write clear, specific prompts — the methodology rewards prompt quality
+Other commands: `/ralph-loop:cancel-ralph` (stop a loop), `/ralph-loop:help` (usage info).
 
 ## References
 
-- <https://awesomeclaude.ai/ralph-wiggum>
-- <https://ghuntley.com/ralph/>
+- [Ralph-Wiggum methodology](https://awesomeclaude.ai/ralph-wiggum)
+- [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)
+- [Dev Containers specification](https://containers.dev/)

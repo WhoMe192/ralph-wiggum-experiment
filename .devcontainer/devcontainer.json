@@ -1,17 +1,30 @@
 {
-  "name": "Ralph-Wiggum Dev Environment",
+  "name": "Claude Code Dev Environment",
+
+  // ── Tech stack ───────────────────────────────────────────────
+  // Swap the base image to match your project's language/runtime.
+  // Popular options:
+  //   mcr.microsoft.com/devcontainers/javascript-node:22
+  //   mcr.microsoft.com/devcontainers/python:3.12
+  //   mcr.microsoft.com/devcontainers/go:1.22
+  //   mcr.microsoft.com/devcontainers/rust:1
+  //   mcr.microsoft.com/devcontainers/base:ubuntu
   "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
+
   "postCreateCommand": "bash .devcontainer/setup.sh",
-  "postStartCommand": "echo '\n\u26a0\ufe0f  Remember to authenticate before use:\n   gh auth login        (GitHub CLI)\n   claude               (Claude Code — follow the login prompt)\n'",
-  "forwardPorts": [3000],
+  "postStartCommand": "bash .devcontainer/check-auth.sh",
+
+  // ── Forwarded ports ──────────────────────────────────────────
+  // Add ports your app needs (e.g. 3000 for Node, 8000 for Django)
+  "forwardPorts": [],
+
   "customizations": {
     "vscode": {
-      "extensions": [
-        "esbenp.prettier-vscode"
-      ],
+      "extensions": [],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh"
       }
