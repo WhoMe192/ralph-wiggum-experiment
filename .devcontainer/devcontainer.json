@@ -15,8 +15,15 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postCreateCommand": "sudo chown -R node:node /home/node/.claude && bash .devcontainer/setup.sh",
   "postStartCommand": "bash .devcontainer/check-auth.sh",
+
+  // ── Persistent Claude Code settings (auth, memory, plugins) ─────────
+  // Named volume keeps /home/node/.claude across container rebuilds so
+  // you don't need to re-authenticate Claude Code after every rebuild.
+  "mounts": [
+    "source=ralph-wiggum-claude-home,target=/home/node/.claude,type=volume"
+  ],
 
   // ── Forwarded ports ──────────────────────────────────────────
   // Add ports your app needs (e.g. 3000 for Node, 8000 for Django)

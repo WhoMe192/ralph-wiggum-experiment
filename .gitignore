@@ -2,6 +2,9 @@
 .claude/*.local.md
 .claude/*.local.json
 
+# Devcontainer secrets
+.devcontainer/.env
+
 # OS
 .DS_Store
 Thumbs.db
