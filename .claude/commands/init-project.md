@@ -8,11 +8,12 @@ You are running the **init-project** skill. Gather project details interactively
 
 Before asking the user anything, gather current file contents and repo metadata. Use the dedicated tools (Read, Bash) — never use `cat` when Read is available.
 
-1. Use the **Read tool** on `.devcontainer/devcontainer.json` — note the exact current values of `"name"`, `"image"`, `"forwardPorts"`, `"extensions"`, and the `"features"` block. You will need these as `old_string` in every Edit call.
-2. Use the **Read tool** on `README.md` (first 5 lines sufficient).
-3. Use the **Read tool** on `CLAUDE.md` (first 10 lines sufficient).
-4. Run via Bash: `test -f init.sh && echo "present" || echo "absent"`
-5. Run via Bash: `git remote get-url origin 2>/dev/null || echo "no-remote"`
+1. Run via Bash: `git status --short` — if any lines appear, warn the user: "There are uncommitted changes in this repo. The init-project commit will include them. Do you want to continue?" Use AskUserQuestion with Continue / Abort options. If the user chooses Abort, stop here and tell them to commit or stash their changes first.
+2. Use the **Read tool** on `.devcontainer/devcontainer.json` — note the exact current values of `"name"`, `"image"`, `"forwardPorts"`, `"extensions"`, and the `"features"` block. You will need these as `old_string` in every Edit call.
+3. Use the **Read tool** on `README.md` (first 5 lines sufficient).
+4. Use the **Read tool** on `CLAUDE.md` (first 10 lines sufficient).
+5. Run via Bash: `test -f init.sh && echo "present" || echo "absent"`
+6. Run via Bash: `git remote get-url origin 2>/dev/null || echo "no-remote"`
 
 **From the remote URL, attempt to infer the GitHub owner:**
 - SSH format: `git@github.com:OWNER/REPO.git` → owner is `OWNER`
@@ -313,14 +314,17 @@ git add .devcontainer/devcontainer.json README.md CLAUDE.md
 git add -u
 ```
 
-Verify what will be committed with `git status`, then commit:
+Verify what will be committed with `git status`, then commit using a heredoc so the multi-line message is handled safely:
 ```bash
-git commit -m "Initialise project: <PROJECT_NAME>
+git commit -m "$(cat <<'EOF'
+Initialise project: <PROJECT_NAME>
 
 Configure devcontainer for <TECH_STACK> (<IMAGE>),
 forward ports <PORTS_OR_NONE>, update README and CLAUDE.md.
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---
