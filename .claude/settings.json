@@ -1,5 +1,18 @@
 {
   "enabledPlugins": {
     "ralph-loop@claude-plugins-official": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'ralph-loop'; then echo 'ERROR: Do not edit ralph-loop config/state files without explicit user instruction.' >&2; exit 1; fi"
+          }
+        ]
+      }
+    ]
   }
 }
