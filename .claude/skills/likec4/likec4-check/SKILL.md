@@ -118,23 +118,23 @@ BLOCKER (fix before anything else)
 
 CRITICAL (must fix)
   ✗ orchestrator — missing metadata block (RULE-001)
-    Evidence: "system orchestrator 'Meeting-to-Trello' {"
-    Fix: add `metadata { ref 'orchestrator/src/index.js' }` inside the element block
+    Evidence: "system orchestrator '<Project Name>' {"
+    Fix: add `metadata { ref '<source-dir>/index.js' }` inside the element block
   ✗ orchestrator — vague description: 'handles requests' (RULE-003)
     Evidence: "description 'handles requests'"
     Fix: replace with a business-meaningful description, e.g. "Receives meeting transcripts,
-    extracts action items via Claude, and creates Trello cards"
+    extracts action items via Claude, and creates <external-card>s"
 
 HIGH (strongly recommended)
   ⚠ orchestrator — technology field missing on container (RULE-103)
     Evidence: "container orchestrator {"  (no technology field)
     Fix: add `technology 'Node.js 20, Express 4'`
-  ⚠ orchestrator -> trello-api — relationship label absent (RULE-104)
-    Evidence: "orchestrator -> trello-api"
-    Fix: add a label, e.g. `orchestrator -> trello-api 'Creates cards'`
+  ⚠ orchestrator -> <external-api> — relationship label absent (RULE-104)
+    Evidence: "orchestrator -> <external-api>"
+    Fix: add a label, e.g. `orchestrator -> <external-api> 'Creates cards'`
 
 MEDIUM (improve where possible)
-  ~ trello-api — tag not in UPPER_CASE (RULE-102)
+  ~ <external-api> — tag not in UPPER_CASE (RULE-102)
     Evidence: "tag #external"
     Fix: rename to `#EXTERNAL`
 

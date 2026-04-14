@@ -89,11 +89,11 @@ specification {
 // model.c4 — no specification block; all elements inside model { }
 model {
 
-  trello = system 'Trello' {
+  <external-service> = system '<external-service>' {
     #EXTERNAL
     description 'Project board where action items are created as cards'
     metadata {
-      ref 'https://trello.com'
+      ref 'https://<external-service>.example'
     }
   }
 

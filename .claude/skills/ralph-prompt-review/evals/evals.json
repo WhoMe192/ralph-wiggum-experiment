@@ -1,0 +1,114 @@
+{
+  "skill_name": "ralph-prompt-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm about to run phase 22 through the pipeline. Can you review the prompt first and tell me if it's ready?",
+      "expected_output": "Identifies prompts/phase-22/ as the target, reads 00-pipeline.md and all step files, scores all 9 dimensions, flags B (no pricing table spec, no error tolerance) and T (test cases not described in step files) as weak, gives verdict of 'Needs improvement' or 'Not ready', and offers to apply fixes.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Report contains a summary table with all 9 dimension rows (C, S, D, B, K, V, P, T, Z)",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Report reads both 00-pipeline.md and at least one step file (evidence: mentions step file content in findings)",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Dimension B (Behavioural Precision) is scored ⚠️ or ❌",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Dimension T (Testability) is scored ⚠️ or ❌",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Overall verdict is 'Needs improvement' or 'Not ready'",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Offers to apply fixes at end of report",
+          "passed": null,
+          "evidence": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check the quality of prompts/phase-01-<workflow-engine>-workflow.md — does it have everything an agent needs to run it?",
+      "expected_output": "Reads the file, scores it low on V (no self-verification commands), P (no read-before-starting list), T (no test deliverables), Z (DONE signal has no checklist), gives 'Not ready' or 'Needs improvement' verdict, provides specific evidence quotes and concrete fix suggestions for each gap.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Report contains a summary table with all 9 dimension rows (C, S, D, B, K, V, P, T, Z)",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Dimension V (Verification Criteria) is scored ❌ or ⚠️",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Dimension T (Testability) is scored ❌ or ⚠️",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Dimension Z (Completion Signal) is scored ⚠️ or ❌",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Report includes evidence quotes (direct text from the file) for at least two gap findings",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Overall verdict is 'Not ready' or 'Needs improvement'",
+          "passed": null,
+          "evidence": null
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Quick quality check on prompts/phase-06-<datastore>-auth.md before we use it as a template for a new phase.",
+      "expected_output": "Reads the file, scores all 9 dimensions as Strong (✅), gives 'Ready to run' verdict, notes it as a good template reference. Does not fabricate gaps where none exist.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Report contains a summary table with all 9 dimension rows (C, S, D, B, K, V, P, T, Z)",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "At least 7 of the 9 dimensions are scored ✅ Strong",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Overall verdict is 'Ready to run'",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Report does NOT score any dimension ❌ (no fabricated major gaps)",
+          "passed": null,
+          "evidence": null
+        },
+        {
+          "text": "Report notes phase-06 as a reference or gold standard",
+          "passed": null,
+          "evidence": null
+        }
+      ]
+    }
+  ]
+}

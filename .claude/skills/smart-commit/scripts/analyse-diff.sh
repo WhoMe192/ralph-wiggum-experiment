@@ -80,7 +80,7 @@ suggest_scope() {
   local files
   if [ -n "$FILES" ]; then files="$FILES"; else files=$(git diff --cached --name-only 2>/dev/null || echo ""); fi
 
-  if echo "$files" | grep -q "^orchestrator/test/e2e/"; then echo "e2e"
+  if echo "$files" | grep -q "^<e2e-test-dir>/"; then echo "e2e"
   elif echo "$files" | grep -q "^orchestrator/"; then echo "orchestrator"
   elif echo "$files" | grep -q "^infra/"; then echo "infra"
   elif echo "$files" | grep -q "^docs/"; then echo "docs"

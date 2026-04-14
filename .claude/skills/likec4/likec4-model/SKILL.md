@@ -56,7 +56,7 @@ Scan the project directory. Report a summary of what was found before extracting
 Documentation sources to glob and read:
 
 - `README.md`, `docs/**/*.md`, `*.md` at root
-- `docs/architecture.md`, `docs/adr/`, `docs/firestore-data-model.md`
+- `docs/architecture.md`, `docs/adr/`, `docs/<datastore>-data-model.md`
 - `orchestrator/package.json`, `infra/*.tf`
 - Existing `.c4` files — if ≥1 `.c4` file is found anywhere under the project directory,
   the model will be **updated**, not replaced
@@ -65,7 +65,7 @@ Documentation sources to glob and read:
 
 Code sources to glob and read:
 
-- Entry points: `orchestrator/src/index.js`, `orchestrator/server.js` or similar
+- Entry points: `<source-dir>/index.js`, `orchestrator/server.js` or similar
 - Route definitions: files matching `*router*`, `*routes*`, `*handler*`
 - Dependency manifests: `orchestrator/package.json`
 - Infrastructure: `Dockerfile`, `infra/*.tf`, `cloudbuild.yaml`
@@ -85,7 +85,7 @@ Build two views from the sources found. Skip the view not applicable to the sele
 - Named services, subsystems, or bounded contexts
 - Described APIs and contracts (endpoints, protocols)
 - Mentioned technology choices
-- External systems referenced by name (Trello, Claude API, Google Cloud)
+- External systems referenced by name (<external-service>, Claude API, Google Cloud)
 - Described data flows and relationships between components
 
 **Code view** — extract from source:
@@ -95,8 +95,8 @@ Build two views from the sources found. Skip the view not applicable to the sele
 - Actual API surface (HTTP verbs and route paths found in router/handler files)
 - Actual outbound integrations (HTTP calls, external API calls)
 - External services inferred from config or env vars
-  (e.g. `TRELLO_API_KEY` → Trello, `ANTHROPIC_API_KEY` → Claude API)
-- Infrastructure topology (Cloud Run, GCS, Firestore, Artifact Registry)
+  (e.g. `<EXT_API_KEY>` → <external-service>, `ANTHROPIC_API_KEY` → Claude API)
+- Infrastructure topology (Cloud Run, GCS, <datastore>, Artifact Registry)
 
 ---
 
@@ -237,7 +237,7 @@ For every element:
 - Description: business-meaningful, not vague (RULE-003)
 - `technology`: required on all containers and components; use specific values from code
   (`'Node.js, Express'` not `'backend'`) (RULE-103)
-- `metadata`: at least one source ref — use file path (`ref 'orchestrator/src/index.js'`)
+- `metadata`: at least one source ref — use file path (`ref '<source-dir>/index.js'`)
   if no URL is available (RULE-001)
 - Drift tags: `#DRIFT_DOCS_ONLY`, `#DRIFT_CODE_ONLY`, etc. as appropriate (RULE-102: `#UPPER_CASE`)
 

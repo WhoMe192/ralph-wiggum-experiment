@@ -3,14 +3,11 @@
     "allow": [
       "Edit(.claude/skills/**)",
       "Write(.claude/skills/**)",
-      "Bash(python3 -c \"import json; json.load\\(open\\('/Users/nathan/git/ralph-wiggum-experiment/.claude/settings.json'\\)\\); print\\('✓ Valid JSON'\\)\")",
-      "Bash(grep -E 'sh$')",
-      "Bash(python3 -m json.tool)"
+      "Bash(python3 -m json.tool:*)",
+      "Bash(git config:*)",
+      "Bash(git submodule:*)"
     ],
-    "additionalDirectories": [
-      "/Users/nathan/git/meeting-to-trello/.claude/skills/corpus-sync",
-      "/Users/nathan/git/meeting-to-trello/.claude/skills/ralph-prompt-create"
-    ]
+    "additionalDirectories": []
   },
   "hooks": {
     "PreToolUse": [
@@ -29,6 +26,17 @@
           {
             "type": "command",
             "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q '\"git commit'; then MSG=$(echo \"$CLAUDE_TOOL_INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); cmd=d.get('command',''); import re; m=re.search(r'-m [\\\"\\x27]([^\\\"\\x27]+)', cmd); print(m.group(1) if m else '')\" 2>/dev/null || echo ''); if [ -n \"$MSG\" ] && ! echo \"$MSG\" | grep -qE '^(feat|fix|docs|style|refactor|test|chore|build|ci|perf|revert)(\\([^)]+\\))?: .+'; then echo \"ERROR: Commit message must follow Conventional Commits: <type>(<scope>): <description>\" >&2; echo \"Types: feat fix docs style refactor test chore build ci perf revert\" >&2; exit 1; fi; fi"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if grep -q 'PIPELINE_DONE' /tmp/ralph-state 2>/dev/null; then echo 'STOP: Pipeline is marked complete in /tmp/ralph-state. Do not continue iterating.'; fi"
           }
         ]
       }
