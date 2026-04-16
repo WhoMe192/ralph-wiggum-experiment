@@ -1,9 +1,9 @@
 ---
 name: adr-refine
 description: >
-  Iteratively improve a draft ADR by filling context gaps, strengthening justifications, and
-  improving clarity through collaborative coaching. Use when a draft exists but needs
-  development. Triggers: 'refine adr', 'improve adr', 'iterate on adr', '/adr-refine'.
+  Iteratively improve a draft ADR: fill gaps, strengthen justifications, clarify wording
+  via coaching. Use after /adr-new or when a draft needs depth.
+  Triggers: 'refine adr', 'improve adr', 'iterate on adr', '/adr-refine'.
 argument-hint: "<adr-number or filename>"
 disable-model-invocation: true
 allowed-tools: Read, Edit, Glob

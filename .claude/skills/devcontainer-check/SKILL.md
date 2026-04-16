@@ -1,6 +1,9 @@
 ---
 name: devcontainer-check
-description: This skill should be used when the user asks to "check the devcontainer", "verify tools are installed", "health check the environment", "check auth status", "is gcloud installed", "is gh authenticated", or wants to confirm the devcontainer is correctly set up after a rebuild.
+description: >
+  Health-check the devcontainer environment. Use when asked to "check the devcontainer",
+  "verify tools are installed", "health check the environment", "check auth status",
+  "is gcloud installed", or "is gh authenticated".
 allowed-tools:
   - Bash(which:*)
   - Bash(gcloud:*)

@@ -1,11 +1,9 @@
 ---
 name: corpus-query
 description: >
-  Query prompts/phase-corpus.jsonl via DuckDB and return matching exemplar records.
-  Invoke via the Agent tool (not the Skill tool) to keep corpus data out of the parent
-  context window. Use when a parent skill needs the top N exemplars filtered by phase type.
-  Triggers: 'query corpus for harness exemplars', 'get top 2 backend phases from corpus',
-  'find best exemplar for phase type X'. Do not invoke directly as a user skill.
+  Query phase-corpus.jsonl via DuckDB; return top N exemplars by type. Invoke via Agent
+  (not Skill) to keep corpus out of parent context. Not a direct user skill.
+  Triggers: 'query corpus for exemplars', 'get top 2 backend phases from corpus'.
 allowed-tools: Bash, Read
 ---
 

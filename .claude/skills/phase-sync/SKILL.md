@@ -1,11 +1,9 @@
 ---
 name: phase-sync
 description: >
-  Detects and corrects discrepancies between prompts/phases.yaml and prompts/phase-runs.yaml,
-  cross-checked against git history and deliverable file existence. Produces a findings table
-  and offers to backfill missing run records or correct stale status fields, with user
-  confirmation before writing.
-  Triggers: 'phase-sync', 'sync phases', 'phase registry', '/phase-sync'.
+  Detects and corrects discrepancies between prompts/phases.yaml and phase-runs.yaml.
+  Backfills missing run records, corrects stale statuses, with user confirmation before
+  writing. Triggers: 'phase-sync', 'sync phases', 'phase registry', '/phase-sync'.
 argument-hint: "[--apply]"
 ---
 

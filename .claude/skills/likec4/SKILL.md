@@ -1,10 +1,9 @@
 ---
 name: likec4
 description: >
-  Entry point for the LikeC4 skill family. Routes to model generation or quality checking.
-  Use when: creating or updating a C4 architecture diagram, or validating an existing .c4 model.
-  Triggers: 'generate c4 model', 'update c4 diagram', 'check c4 model', 'validate likec4',
-  '/likec4'.
+  Routes to LikeC4 sub-skills. Use for creating/updating a C4 diagram or validating a
+  .c4 model. Not for non-C4 diagrams (Mermaid, PlantUML).
+  Triggers: 'generate c4 model', 'update c4 diagram', 'check c4 model', '/likec4'.
 argument-hint: "[model | check] [<path>] [--docs-only | --code-only]"
 allowed-tools: AskUserQuestion, ToolSearch, Read, Edit, Write, Glob, Bash
 ---
@@ -49,7 +48,10 @@ Before delegating, emit a one-line routing confirmation:
 
 ## Standards and co-update partners
 
-LikeC4 DSL rules (element types, relationship syntax, view declarations) are defined by the LikeC4 specification at <https://likec4.dev/dsl/>. If the LikeC4 DSL version changes, update both `likec4-model/SKILL.md` and `likec4-check/SKILL.md` together.
+LikeC4 DSL rules (element types, relationship syntax, view declarations) are summarised
+for sub-flows in `.claude/skills/likec4/dsl-reference.md` and authoritatively defined by
+the LikeC4 specification at <https://likec4.dev/dsl/>. If the LikeC4 DSL version changes,
+update `dsl-reference.md`, `likec4-model/SKILL.md`, and `likec4-check/SKILL.md` together.
 
 | Standard | Shared with |
 | --- | --- |

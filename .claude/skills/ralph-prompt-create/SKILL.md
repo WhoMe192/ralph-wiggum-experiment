@@ -1,7 +1,11 @@
 ---
 name: ralph-prompt-create
-description: Creates complete ralph-loop PROMPT files through a structured question-by-question conversation, then writes the finished file to prompts/phase-NN-description.md. Use when drafting a new ralph phase, expanding a partial prompt draft, or starting a new ralph-loop iteration for this project.
+description: >
+  Creates ralph-loop PROMPT files via structured Q&A, then writes to
+  prompts/phase-NN-description.md. Use when drafting a new ralph phase or expanding a
+  partial prompt. Do not use to review existing prompts — use ralph-prompt-review.
 argument-hint: "[--create | partial-prompt-file | issue-number]"
+disable-model-invocation: true
 allowed-tools: AskUserQuestion, ToolSearch, Bash, Read, Write, Glob, Grep, Skill
 ---
 

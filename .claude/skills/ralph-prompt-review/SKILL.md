@@ -69,7 +69,8 @@ See `docs/skill-design-standards.md` for full dimension definitions and Strong /
 
 **Stop condition:** If ≥3 dimensions score ❌, stop after producing the report. Do not apply fixes until the user explicitly confirms they want to proceed — the prompt may need substantial restructuring rather than targeted edits.
 
-See also `evals/` in this skill directory for calibration test runs.
+See also `evals/evals.json` in this skill directory for calibration test cases and
+expected outputs.
 
 For every ⚠️ or ❌, provide:
 1. **Evidence**: a direct quote (or the absence) from the file that justifies the score.

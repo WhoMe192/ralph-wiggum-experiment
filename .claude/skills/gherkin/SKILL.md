@@ -98,8 +98,17 @@ Do not summarise or paraphrase the sub-flow — execute it directly.
 
 ## Calibration
 
-- **Strong:** no `.feature` file committed yet — update when first feature file is added to `docs/ux/`.
-- **Weak:** no committed artefact yet — update when first rejected/revised scenario file is documented.
+Bad→good scenario pairs covering the most common rule violations live in
+`.claude/skills/gherkin/examples.md`. Use these when calibrating what a rule violation
+looks like vs. its corrected form.
+
+- **Strong:** §Good sections in `.claude/skills/gherkin/examples.md` — passing scenarios
+  that satisfy every rule in `bdd-standards.md`.
+- **Weak:** §Bad sections in `.claude/skills/gherkin/examples.md` — pre-correction
+  scenarios demonstrating typical failures.
+
+When the first `docs/ux/*.md` feature file is committed, update `examples.md` to cite it
+as the canonical strong-pass artefact.
 
 *Calibration reference: `docs/skill-calibration-manifest.md` — gherkin row.*
 

@@ -1,9 +1,9 @@
 ---
 name: adr-check
 description: >
-  Run a pre-submission completeness checklist on an ADR. Faster and more mechanical than
-  adr-review — verifies all required sections and fields are present. Use as a quick gate
-  before review or approval. Triggers: 'check adr', 'adr checklist', '/adr-check'.
+  Pre-submission completeness checklist for an ADR. Mechanical section/field presence —
+  faster than adr-review. Do not use for content quality (use adr-review).
+  Triggers: 'check adr', 'adr checklist', '/adr-check'.
 argument-hint: "<adr-number or filename>"
 allowed-tools: Read, Glob
 ---

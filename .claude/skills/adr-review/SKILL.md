@@ -1,9 +1,9 @@
 ---
 name: adr-review
 description: >
-  Quality review an existing ADR before it is approved. Checks structure, content quality,
-  technical accuracy, and style. Use before approving any ADR, or when a draft needs a
-  pre-submission quality gate. Triggers: 'review adr', 'adr quality check', '/adr-review'.
+  Quality review an existing ADR before approval. Checks structure, content, accuracy,
+  and style. Use before approving or when a draft needs a quality gate.
+  Triggers: 'review adr', 'adr quality check', '/adr-review'.
 argument-hint: "<adr-number or filename>"
 allowed-tools: Read, Glob
 ---

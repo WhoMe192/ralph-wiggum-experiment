@@ -1,11 +1,11 @@
 ---
 name: settings-hygiene
 description: >
-  Analyses .claude/settings.json for overly-specific permission entries and proposes safe
-  wildcard consolidations and one-off removal. Groups candidates by entry type. Dry-run
-  by default; use --apply to write changes.
-  Triggers: 'settings hygiene', 'clean settings', 'consolidate permissions', '/settings-hygiene'.
+  Analyses .claude/settings.json for overly-specific permission entries. Proposes wildcard
+  consolidations and one-off removal. Dry-run by default; --apply to write.
+  Triggers: 'settings hygiene', 'consolidate permissions', '/settings-hygiene'.
 argument-hint: "[--apply]"
+disable-model-invocation: true
 ---
 
 ## Inputs

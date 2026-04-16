@@ -1,10 +1,9 @@
 ---
 name: readme-check
 description: >
-  Review a README for quality, structure, reading age, and clarity. Use when: (1) checking a
-  README before committing or publishing, (2) auditing existing READMEs for improvement,
-  (3) coaching authors through fixes interactively. Triggers: 'readme check', 'review readme',
-  'readme quality', '/readme-check'.
+  Review a README for quality, structure, reading age, and clarity. Use before committing,
+  when auditing an existing README, or coaching authors through fixes.
+  Triggers: 'readme check', 'review readme', '/readme-check'.
 argument-hint: "[<file-path>]"
 allowed-tools: Read, Edit, Glob, Bash
 ---
