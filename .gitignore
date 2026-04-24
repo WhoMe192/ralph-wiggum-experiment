@@ -1,6 +1,7 @@
 # Claude Code local state
 .claude/*.local.md
 .claude/*.local.json
+.claude.local.md
 
 # Devcontainer secrets
 .devcontainer/.env

@@ -1,54 +1,46 @@
-# [Your Project Name]
-
-<!-- This file gives Claude Code context about your project.
-     Fill in the sections below so Claude can assist you more effectively.
-     Delete any sections that aren't relevant. -->
+# Ralph-Wiggum Experiment (Template Repo)
 
 ## Overview
 
-<!-- What does this project do? What problem does it solve? -->
+This is a **devcontainer template** for Claude Code + Ralph-Wiggum iterative loop
+methodology. Users clone it and run `/init-project` to configure it for their own
+project. The template itself is not a shipped application.
 
 ## Tech Stack
 
-<!-- e.g. Node.js 22, TypeScript, React, PostgreSQL -->
+- Node.js 22 (devcontainer base image)
+- Python 3.13 + duckdb, pandas, numpy, pyyaml (corpus/pipeline tooling via `pyproject.toml`)
+- JavaScript (scripts: `pipeline-deps.js`, `pipeline-deps.test.js`)
 
 ## Project Structure
 
-<!-- Describe the key directories and their purpose -->
+- `.devcontainer/` — container config, secret-fetching, auth checks
+- `scripts/` — pipeline dependency tooling
+- `docs/` — skill design standards and calibration manifests
+- `CLAUDE.md` — pre-populated by `/init-project` for new projects
 
 ## Development
-
-### Build
-
-```bash
-# e.g. npm run build
-```
 
 ### Test
 
 ```bash
-# e.g. npm test
+node scripts/pipeline-deps.test.js   # JS unit tests
 ```
 
-### Run
+### Python tooling
 
 ```bash
-# e.g. npm start
+uv run python scripts/migrate-corpus.py   # corpus migration
 ```
-
-## Conventions
-
-<!-- Code style, naming conventions, patterns to follow -->
-
-## Important Notes
-
-<!-- Anything Claude should know: gotchas, constraints, external dependencies -->
 
 ## Devcontainer
 
 - After container rebuilds, CLI tools (gcloud, gh, claude, tofu) may need reconfiguration.
 - Always verify tool availability with `which <tool>` or `<tool> --version` before running commands that depend on them.
 - Prefer apt-based installs over curl scripts or devcontainer features for gcloud and similar CLI tools — feature-based and curl installs have historically failed in this environment.
+- `~/.claude.json` is a symlink to the persistent volume (`~/.claude/claude-code/claude.json`). Claude Code can silently replace it with a regular file during a session; `check-auth.sh` re-links it on the next container start.
+- `fetch-secrets.sh` runs on the macOS host and reads from Keychain. In Codespaces or Linux, set `ANTHROPIC_API_KEY` and `GITHUB_TOKEN` as repo/Codespace secrets instead.
+- `init.sh` in the repo root is a one-time template artifact — use `/init-project` instead; that skill deletes `init.sh` when done.
 
 ## Ralph Loop
 
