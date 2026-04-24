@@ -12,34 +12,48 @@ it for your project.
 Click **"Use this template"** on GitHub, or:
 
 ```bash
-gh repo create my-project --template WhoMe192/ralph-wiggum-experiment --clone
+gh repo create my-project --template Eaiger-Ent/ralph-wiggum-experiment --clone
 cd my-project
 ```
 
 ### 2. Open in a devcontainer
 
 - **VS Code:** Open the folder → click **Reopen in Container** when prompted
-- **Codespaces:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/WhoMe192/ralph-wiggum-experiment)
+- **Codespaces:** [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Eaiger-Ent/ralph-wiggum-experiment)
 
 The container automatically installs Claude Code CLI, the ralph-loop plugin,
 and GitHub CLI.
 
-### 3. Store your Anthropic API key in the macOS Keychain
+### 3. Store your Claude credential in the macOS Keychain
 
-The container reads your API key from the macOS Keychain before it starts,
-so you never need to paste secrets into the terminal. Run this once on your Mac:
+The container reads your Claude credential from the macOS Keychain before it
+starts, so you never need to paste secrets into the terminal. Keychain service
+names are generic (no repo prefix) so a single credential is reused across every
+ralph-based project on your Mac.
+
+OAuth token (preferred — uses your Claude subscription billing):
+
+```bash
+claude setup-token   # prints an sk-ant-oat01-... token
+security add-generic-password -a "$USER" \
+  -s "CLAUDE_OAUTH_TOKEN" \
+  -w "sk-ant-oat01-..."
+```
+
+API key (fallback — pay-per-token billing):
 
 ```bash
 security add-generic-password -a "$USER" \
-  -s "RALPH_WIGGUM_ANTHROPIC_API_KEY" \
+  -s "ANTHROPIC_API_KEY" \
   -w "sk-ant-..."
 ```
 
-On every subsequent container start, `fetch-secrets.sh` retrieves the key automatically
-and injects it as `ANTHROPIC_API_KEY` inside the container.
+On every container start, `fetch-secrets.sh` retrieves whichever is present and
+injects it as `CLAUDE_CODE_OAUTH_TOKEN` and/or `ANTHROPIC_API_KEY` inside the
+container. If both are stored, the OAuth token takes priority.
 
-> **Note:** If the key is not found in the Keychain, the container will fail
-> to start and print instructions to add it.
+> **Note:** If neither credential is found, the container will fail to start and
+> print instructions to add one.
 
 ### 4. Authenticate GitHub CLI (optional)
 
@@ -47,7 +61,7 @@ and injects it as `ANTHROPIC_API_KEY` inside the container.
 gh auth login
 ```
 
-Claude Code auth is handled by the API key above — no interactive login needed.
+Claude Code auth is handled by the OAuth token (or API key) above — no interactive login needed.
 
 ### 5. Initialise your project
 

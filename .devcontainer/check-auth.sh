@@ -51,18 +51,27 @@ elif [ -n "${GITHUB_TOKEN:-}" ]; then
   echo "  ✗ GitHub CLI — GITHUB_TOKEN is set but gh rejected it (expired or wrong scopes?)"
 else
   echo "  ✗ GitHub CLI — not authenticated"
-  echo "    Store a PAT:  security add-generic-password -a \"\$USER\" -s \"RALPH_WIGGUM_GITHUB_TOKEN\" -w \"ghp_...\""
+  echo "    Store a PAT:  security add-generic-password -a \"\$USER\" -s \"GITHUB_TOKEN\" -w \"ghp_...\""
   echo "    Or run:       gh auth login"
 fi
 
-# Claude Code
-if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
-  echo "  ✓ Claude Code — API key present"
+# Claude Code — OAuth token preferred, API key fallback, then persisted OAuth in ~/.claude
+if [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+  echo "  ✓ Claude Code — OAuth token present (subscription billing)"
+elif [ -n "${ANTHROPIC_API_KEY:-}" ]; then
+  echo "  ✓ Claude Code — API key present (pay-per-token fallback)"
 elif claude auth status &>/dev/null; then
-  echo "  ✓ Claude Code — authenticated (OAuth)"
+  echo "  ✓ Claude Code — authenticated (persisted OAuth in ~/.claude volume)"
 else
-  echo "  ✗ Claude Code — not authenticated and ANTHROPIC_API_KEY not set"
-  echo "    Run:  claude    (then follow the login prompt)"
+  echo "  ✗ Claude Code — not authenticated"
+  echo "    Preferred: run 'claude setup-token' on your Mac, then:"
+  echo "      security add-generic-password -a \"\$USER\" -s \"CLAUDE_OAUTH_TOKEN\" -w \"sk-ant-oat01-...\""
+fi
+
+if command -v claude &>/dev/null; then
+  echo "  ✓ Claude CLI — $(claude --version 2>/dev/null | head -1)"
+else
+  echo "  ✗ Claude CLI — not installed (run: bash .devcontainer/setup.sh)"
 fi
 
 # Git identity
